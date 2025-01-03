@@ -26,8 +26,8 @@ if __name__ == "__main__":
     faucet_url = "https://faucet.testnet.humanity.org/api/claim"
     payload = {"address": "0x2Ae8985D9c26F0117994A0f1451FeBAc6B8F7C51"}
 
-    # Time interval in seconds (1 minute 5 seconds = 70 seconds)
-    interval = 70
+    # Time interval in seconds
+    interval = 5
 
     while True:
         print("\nAttempting to claim faucet Humanity...")
