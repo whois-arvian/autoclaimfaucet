@@ -34,10 +34,9 @@ def claim_all_addresses():
         time.sleep(5)  # Delay antar request untuk menghindari limit API
     print("[INFO] Faucet claim process completed.")
 
-# Jalankan setiap 2 jam
-schedule.every(2).hours.do(claim_all_addresses)
+schedule.every(1).minutes.do(claim_all_addresses)
 
-print("Scheduler started. Running every 2 hours...")
+print("Scheduler started. Running every 1 minutes...")
 while True:
     schedule.run_pending()
-    time.sleep(60)  # Mengecek setiap 1 menit
+    time.sleep(10)
