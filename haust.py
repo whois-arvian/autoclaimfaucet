@@ -34,7 +34,7 @@ def claim_all_addresses():
     print("[INFO] Faucet claim process completed.")
 
 # Jalankan setiap 2 jam
-schedule.every(2).hours.do(claim_all_addresses)
+schedule.every(1).minutes.do(claim_all_addresses)
 
 print("Scheduler started. Running every 2 hours...")
 while True:
