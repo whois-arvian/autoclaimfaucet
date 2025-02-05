@@ -9,6 +9,8 @@ addresses = [
     "0x1D0ea7ece412880FE94C8B3BCd7342054C79a033",
     "0x8538BBAF6d262AC520AF853236cBaD496233E48B",
     "0xD6b10b7B50be88d053cb0b9Dad58B5Ab6B9F636C",
+    "0x2F9b3803423e3a6c38Bc94F5Ea12Ac75D3eC9266",
+    "0xdB6b1A9c14D05947Ff6F6be6958AdE8C19061A5c",
 ]
 
 FAUCET_URL = "https://faucet-test.haust.network/api/claim"
@@ -35,10 +37,10 @@ def claim_all_addresses():
         time.sleep(5)  # Delay antar request untuk menghindari limit API
     print("[INFO] Faucet claim process completed.")
 
-# Jalankan setiap 2 jam
-schedule.every(2).hours.do(claim_all_addresses)
+# Jalankan setiap 8 jam
+schedule.every(8).hours.do(claim_all_addresses)
 
-print("Scheduler started. Running every 2 hours...")
+print("Scheduler started. Running every 8 hours...")
 while True:
     schedule.run_pending()
     time.sleep(60)  # Mengecek setiap 1 menit
