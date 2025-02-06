@@ -15,11 +15,26 @@ addresses = [
 
 FAUCET_URL = "https://faucet-test.haust.network/api/claim"
 
+HEADERS = {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "en-GB,en;q=0.5",
+    "Cache-Control": "no-cache",
+    "Content-Type": "application/json",
+    "Origin": "https://faucet-test.haust.network",
+    "Pragma": "no-cache",
+    "Referer": "https://faucet-test.haust.network/",
+    "Sec-Fetch-Dest": "empty",
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Site": "same-origin",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+}
+
 def claim_faucet(address):
     """Mengklaim faucet untuk satu address"""
     payload = {"address": address}
     try:
-        response = requests.post(FAUCET_URL, json=payload)
+        response = requests.post(FAUCET_URL, json=payload, headers=HEADERS)
         if response.status_code == 200:
             print(f"[SUCCESS] {address} claimed successfully!", response.json())
         elif response.status_code == 429:
