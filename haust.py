@@ -1,6 +1,7 @@
 import requests
 import schedule
 import time
+from datetime import datetime
 
 # Daftar address yang akan diklaim
 addresses = [
@@ -13,7 +14,7 @@ addresses = [
     "0xdB6b1A9c14D05947Ff6F6be6958AdE8C19061A5c",
 ]
 
-FAUCET_URL = "https://faucet-test.haust.network/api/claim"
+FAUCET_URL = "https://faucet.haust.app/api/claim"
 
 HEADERS = {
     "Accept": "*/*",
@@ -21,9 +22,9 @@ HEADERS = {
     "Accept-Language": "en-GB,en;q=0.5",
     "Cache-Control": "no-cache",
     "Content-Type": "application/json",
-    "Origin": "https://faucet-test.haust.network",
+    "Origin": "https://faucet.haust.app",
     "Pragma": "no-cache",
-    "Referer": "https://faucet-test.haust.network/",
+    "Referer": "https://faucet.haust.app/",
     "Sec-Fetch-Dest": "empty",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-origin",
@@ -36,26 +37,29 @@ def claim_faucet(address):
     try:
         response = requests.post(FAUCET_URL, json=payload, headers=HEADERS)
         if response.status_code == 200:
-            print(f"[SUCCESS] {address} claimed successfully!", response.json())
+            print(f"[{datetime.now()}] [SUCCESS] {address} claimed successfully!", response.json())
         elif response.status_code == 429:
-            print(f"[WARNING] {address} Rate limit exceeded. Try again later.")
+            print(f"[{datetime.now()}] [WARNING] {address} Rate limit exceeded. Try again later.")
         else:
-            print(f"[ERROR] {address} Unexpected response: {response.status_code}", response.text)
+            print(f"[{datetime.now()}] [ERROR] {address} Unexpected response: {response.status_code}", response.text)
     except Exception as e:
-        print(f"[ERROR] {address} An error occurred: {e}")
+        print(f"[{datetime.now()}] [ERROR] {address} An error occurred: {e}")
 
 def claim_all_addresses():
     """Loop semua address dan klaim faucet"""
-    print("\n[INFO] Running faucet claim process...")
+    print(f"\n[{datetime.now()}] [INFO] Running faucet claim process...")
     for address in addresses:
         claim_faucet(address)
         time.sleep(5)  # Delay antar request untuk menghindari limit API
-    print("[INFO] Faucet claim process completed.")
+    print(f"[{datetime.now()}] [INFO] Faucet claim process completed.")
 
-# Jalankan setiap 8 jam
-schedule.every(8).hours.do(claim_all_addresses)
+# Jalankan setiap 15 menit
+schedule.every(15).minutes.do(claim_all_addresses)
 
-print("Scheduler started. Running every 8 hours...")
+print("Scheduler started. Running every 15 minutes...")
 while True:
-    schedule.run_pending()
+    try:
+        schedule.run_pending()
+    except Exception as e:
+        print(f"[{datetime.now()}] [ERROR] Scheduler encountered an error: {e}")
     time.sleep(60)  # Mengecek setiap 1 menit
