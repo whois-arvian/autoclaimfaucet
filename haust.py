@@ -1,7 +1,7 @@
 import requests
 import schedule
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Daftar address yang akan diklaim
 addresses = [
@@ -31,6 +31,9 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
 }
 
+last_run_time = None
+next_run_time = None
+
 def claim_faucet(address):
     """Mengklaim faucet untuk satu address"""
     payload = {"address": address}
@@ -47,13 +50,23 @@ def claim_faucet(address):
 
 def claim_all_addresses():
     """Loop semua address dan klaim faucet"""
-    print(f"\n[{datetime.now()}] [INFO] Running faucet claim process...")
+    global last_run_time, next_run_time
+    last_run_time = datetime.now()
+    next_run_time = last_run_time + timedelta(minutes=15)
+
+    print(f"\n[{last_run_time}] [INFO] Running faucet claim process...")
     for address in addresses:
         claim_faucet(address)
         time.sleep(5)  # Delay antar request untuk menghindari limit API
-    print(f"[{datetime.now()}] [INFO] Faucet claim process completed.")
 
-# Jalankan setiap 15 menit
+    print(f"[{datetime.now()}] [INFO] Faucet claim process completed.")
+    print(f"[INFO] Last Running: {last_run_time.strftime('%H:%M:%S')}")
+    print(f"[INFO] Next Running: {next_run_time.strftime('%H:%M:%S')}\n")
+
+# Jalankan pertama kali tanpa menunggu
+claim_all_addresses()
+
+# Jadwalkan setiap 15 menit
 schedule.every(15).minutes.do(claim_all_addresses)
 
 print("Scheduler started. Running every 15 minutes...")
